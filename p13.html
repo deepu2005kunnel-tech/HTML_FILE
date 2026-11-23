@@ -1,0 +1,103 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Calendar Generator</title>
+    <style>
+        table {
+            border-collapse: collapse;
+            width: 350px;
+            text-align: center;
+        }
+        th, td {
+            border: 1px solid black;
+            padding: 10px;
+        }
+        th {
+            background-color: lightblue;
+        }
+    </style>
+</head>
+<body>
+
+    YEAR:
+    <input type="text" id="year_get">
+    <br><br>
+
+    MONTH (1 - 12):
+    <input type="text" id="month_get">
+    <br><br>
+
+    <input type="button" value="Display Calendar"
+           onclick="generate()">
+
+    <br><br>
+
+    <div id="content"></div>
+
+    <script>
+    function generate()
+    {
+        var year_get = parseInt(
+            document.getElementById("year_get").value
+        );
+
+        var month_get = parseInt(
+            document.getElementById("month_get").value
+        );
+
+        if (isNaN(year_get) || isNaN(month_get) ||
+            month_get < 1 || month_get > 12) {
+            alert("Please enter a valid year and month!");
+            return;
+        }
+
+        month_get -= 1;
+
+        var date = new Date(year_get, month_get, 1);
+
+        var day = date.getDay();
+
+        var init_content =
+        "<table><tr>" +
+        "<th>Sun</th><th>Mon</th><th>Tue</th>" +
+        "<th>Wed</th><th>Thu</th><th>Fri</th>" +
+        "<th>Sat</th></tr><tr>";
+
+        // Add empty cells before the first date
+        for (var i = 0; i < day; i++) {
+            init_content += "<td></td>";
+        }
+
+        // Generate dates of the month
+        while (date.getMonth() == month_get) {
+
+            init_content += "<td>" +
+                            date.getDate() + "</td>";
+
+            if (date.getDay() == 6) {
+                init_content += "</tr><tr>";
+            }
+
+            date.setDate(date.getDate() + 1);
+        }
+
+        // Complete the last row
+        var lastDay = date.getDay();
+
+        if (lastDay != 0) {
+            for (var i = lastDay; i < 7; i++) {
+                init_content += "<td></td>";
+            }
+            init_content += "</tr>";
+        }
+
+        init_content += "</table>";
+
+        document.getElementById("content").innerHTML =
+            init_content;
+    }
+    </script>
+
+</body>
+</html>
